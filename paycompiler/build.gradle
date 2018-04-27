@@ -1,0 +1,36 @@
+apply plugin: 'java-library'
+apply plugin: 'com.novoda.bintray-release'
+
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'com.google.auto.service:auto-service:1.0-rc3'
+    implementation 'com.google.auto:auto-common:0.8'
+}
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+    //加上这些
+    tasks.withType(Javadoc) {
+        options{ encoding "UTF-8"
+            charSet 'UTF-8'
+            links "http://docs.oracle.com/javase/7/docs/api"
+        }
+    }
+}
+
+
+publish {
+    userOrg = 'wzgcd'      //bintray注册的用户名
+    groupId = 'com.wzgiceman'         //compile引用时的第1部分groupId
+    artifactId = 'RxBus'     //compile引用时的第2部分项目名
+    publishVersion = '1.0.1'    //compile引用时的第3部分版本号
+    desc = 'This is a rxbus same of eventbus extend library '
+    website = 'https://github.com/wzgiceman/Rxbus'
+}
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
