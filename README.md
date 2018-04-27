@@ -37,17 +37,28 @@ public class MyApplication extends Application {
 
 paysdk集成步骤
 -------------------------------------
-1.在主项目build.gradle中添加如下依赖
-
+1.在根项目中添加jitpack路径
 ```
-dependencies {
-    compile 'com.kerwin:paysdk:1.0.0'
-    annotationProcessor 'com.kerwin:paycompiler:1.0.0'
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
 }
 ```
 
 
-2.在主项目build.gradle添加编译时参数
+2.在主项目build.gradle中添加如下依赖
+
+```
+dependencies {
+    annotationProcessor 'com.github.kerwin1321.paysdk:paycompiler:1.0.0'
+    compile 'com.github.kerwin1321.paysdk:paysdk:1.0.0'
+}
+```
+
+
+3.在主项目build.gradle添加编译时参数
 
 ```
 android {
