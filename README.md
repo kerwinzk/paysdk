@@ -41,8 +41,8 @@ paysdk集成步骤
 
 ```
 dependencies {
-    annotationProcessor 'com.yesway.sdk:paycompiler:0.0.5'
-    compile 'com.yesway.sdk:paysdk:0.0.5@aar'
+    compile 'com.kerwin:paysdk:1.0.0'
+    annotationProcessor 'com.kerwin:paycompiler:1.0.0'
 }
 ```
 

@@ -1,5 +1,7 @@
 apply plugin: 'java-library'
-apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group='com.github.kerwin1321'
 
 
 dependencies {
@@ -13,24 +15,8 @@ allprojects {
     repositories {
         jcenter()
     }
-    //加上这些
-    tasks.withType(Javadoc) {
-        options{ encoding "UTF-8"
-            charSet 'UTF-8'
-            links "http://docs.oracle.com/javase/7/docs/api"
-        }
-    }
 }
 
-
-publish {
-    userOrg = 'kerwinzhang'
-    groupId = 'com.kerwin'
-    artifactId = 'paycompiler'
-    publishVersion = '1.0.0'
-    desc = 'This is a Android mobile paysdk, support wxpay,alipay '
-    website = 'https://github.com/kerwin1321/paysdk'
-}
 
 
 sourceCompatibility = "1.8"
