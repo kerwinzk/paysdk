@@ -6,6 +6,7 @@ package com.kerwin.paysdk;
  */
 
 public class WxConfig {
+
     public static String WX_APPID;
 
     public static void setWxAppid(String wxAppid) {

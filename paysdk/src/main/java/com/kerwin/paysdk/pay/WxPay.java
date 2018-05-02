@@ -29,7 +29,6 @@ import org.json.JSONObject;
  * @author zhangke
  */
 class WxPay extends AbstractPay<BaseResp> {
-
     /**
      * 启动微信支付
      *
@@ -40,24 +39,50 @@ class WxPay extends AbstractPay<BaseResp> {
     public void onPay(Activity context, String orderinfo, OnPayResultListener listener) {
         this.mOnPayResultListener = listener;
 
+        PayReq req = getPayReq(orderinfo);
+
+        IWXAPI api = registerApp(context, req.appId);
+        if (api != null) {
+            api.sendReq(req);
+        }
+    }
+
+    /**
+     * 注册app
+     *
+     * @param context
+     * @param appId
+     * @return
+     */
+    private IWXAPI registerApp(Activity context, String appId) {
+        // 缓存appid，支付回调时需要使用到该appid
+        WxConfig.setWxAppid(appId);
+
+        //在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
+        IWXAPI api = WXAPIFactory.createWXAPI(context, appId);
+        api.registerApp(appId);
+
+        if (!api.isWXAppInstalled()) {
+            Toast.makeText(context, "没有安装微信客户端", Toast.LENGTH_SHORT).show();
+            return null;
+        } else if (!api.isWXAppSupportAPI()) {
+            Toast.makeText(context, "该版本微信客户端不支持微信支付", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        return api;
+    }
+
+    /**
+     * 创建微信支付请求体
+     *
+     * @param orderinfo
+     * @return
+     * @throws JSONException
+     */
+    private PayReq getPayReq(String orderinfo) {
+        PayReq req = new PayReq();
         try {
-            /*
-             * 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
-			 */
-            IWXAPI api = WXAPIFactory.createWXAPI(context, WxConfig.WX_APPID);
-            api.registerApp(WxConfig.WX_APPID);
-
-            if (!api.isWXAppInstalled()) {
-                Toast.makeText(context, "没有安装微信客户端", Toast.LENGTH_SHORT).show();
-                return;
-            } else if (!api.isWXAppSupportAPI()) {
-                Toast.makeText(context, "该版本微信客户端不支持微信支付", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
             JSONObject json = new JSONObject(orderinfo);
-
-            PayReq req = new PayReq();
             req.appId = json.getString("appid");
             req.partnerId = json.getString("partnerid");
             req.prepayId = json.getString("prepayid");
@@ -66,13 +91,11 @@ class WxPay extends AbstractPay<BaseResp> {
             req.packageValue = json.getString("package");
             req.sign = json.getString("sign");
             // req.extData = "";
+            return req;
+        } catch (Exception e) {
 
-            api.sendReq(req);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
-
+        return req;
     }
 
     /**

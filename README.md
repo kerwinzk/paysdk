@@ -8,14 +8,9 @@ mobilepay
 
 paysdk使用步骤:
 ------------------------------------
-1.初始化微信支付appid。（建议在项目主Application中初始化）
 
-```
-    // appid在微信开发者平台注册生成
-    WxConfig.setWxAppid("appid12345");
-```
 
-2.添加支付注解
+1.添加支付注解
 在主项目任意一个类中添加注解@PayMark。(建议在主Application中添加)
 
 ```
@@ -26,7 +21,7 @@ public class MyApplication extends Application {
 ```
 
 
-3.启动支付
+2.启动支付
 
 ```
 
@@ -53,7 +48,7 @@ allprojects {
 ```
 dependencies {
     annotationProcessor 'com.github.kerwin1321.paysdk:paycompiler:1.0.0'
-    compile 'com.github.kerwin1321.paysdk:paysdk:1.0.0'
+    compile 'com.github.kerwin1321.paysdk:paysdk:1.0.1'
 }
 ```
 
