@@ -29,6 +29,7 @@ import org.json.JSONObject;
  * @author zhangke
  */
 class WxPay extends AbstractPay<BaseResp> {
+
     /**
      * 启动微信支付
      *
@@ -40,11 +41,12 @@ class WxPay extends AbstractPay<BaseResp> {
         this.mOnPayResultListener = listener;
 
         PayReq req = getPayReq(orderinfo);
-
         IWXAPI api = registerApp(context, req.appId);
-        if (api != null) {
-            api.sendReq(req);
+        if (!checkWechatSupport(api)) {
+            return;
         }
+
+        api.sendReq(req);
     }
 
     /**
@@ -62,14 +64,32 @@ class WxPay extends AbstractPay<BaseResp> {
         IWXAPI api = WXAPIFactory.createWXAPI(context, appId);
         api.registerApp(appId);
 
-        if (!api.isWXAppInstalled()) {
-            Toast.makeText(context, "没有安装微信客户端", Toast.LENGTH_SHORT).show();
-            return null;
-        } else if (!api.isWXAppSupportAPI()) {
-            Toast.makeText(context, "该版本微信客户端不支持微信支付", Toast.LENGTH_SHORT).show();
-            return null;
-        }
         return api;
+    }
+
+    /**
+     * 检查是否可以微信支付
+     *
+     * @param api
+     * @return
+     */
+    public boolean checkWechatSupport(IWXAPI api) {
+        if (api == null) {
+            onResult(PAY_RESULT_ERROR, "微信注册失败，请检查appid");
+            return false;
+        }
+
+        if (!api.isWXAppInstalled()) {
+            onResult(PAY_RESULT_ERROR, "没有安装微信");
+            return false;
+        }
+
+        if (!api.isWXAppSupportAPI()) {
+            onResult(PAY_RESULT_ERROR, "该版本微信不支持微信支付");
+            return false;
+        }
+
+        return true;
     }
 
     /**

@@ -18,6 +18,7 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSON;
 import com.alipay.sdk.app.PayTask;
 
+import java.lang.ref.WeakReference;
 import java.util.Map;
 
 /**
@@ -26,28 +27,11 @@ import java.util.Map;
  * @author zhangke
  */
 class AliPay extends AbstractPay<AliPayResult> {
+    private PayHandler payHandler;
 
-
-    private Handler mHandler = new Handler() {
-
-        @SuppressWarnings("unchecked")
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 100:
-                    AliPayResult payResult = new AliPayResult((Map<String, String>) msg.obj);
-
-                    onResult(payResult);
-
-
-                    break;
-
-                default:
-                    break;
-            }
-
-        }
-
-    };
+    public AliPay() {
+        payHandler = new PayHandler(this);
+    }
 
     /**
      * 启动支付宝支付
@@ -59,20 +43,18 @@ class AliPay extends AbstractPay<AliPayResult> {
     public void onPay(final Activity activity, final String orderInfo, OnPayResultListener listener) {
         this.mOnPayResultListener = listener;
 
-
         Runnable payRunnable = new Runnable() {
             @Override
             public void run() {
                 PayTask alipay = new PayTask(activity);
-                /**
-                 * payV2第二个参数表示是否显示调起支付前加载页面
-                 */
+
+                // payV2第二个参数表示是否显示调起支付前加载页面
                 Map<String, String> result = alipay.payV2(orderInfo, false);
 
                 Message msg = new Message();
                 msg.what = 100;
                 msg.obj = result;
-                mHandler.sendMessage(msg);
+                payHandler.sendMessage(msg);
             }
         };
 
@@ -105,6 +87,34 @@ class AliPay extends AbstractPay<AliPayResult> {
             code = PAY_RESULT_ERROR;
         }
         onResult(code, response);
+    }
+
+
+    /**
+     * 支付处理Handler
+     */
+    public static class PayHandler extends Handler {
+
+        private WeakReference<AliPay> reference;
+
+        public PayHandler(AliPay aliPay) {
+            reference = new WeakReference<AliPay>(aliPay);
+        }
+
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 100:
+                    AliPayResult payResult = new AliPayResult((Map<String, String>) msg.obj);
+                    AliPay aliPay = reference.get();
+                    if (aliPay != null) {
+                        aliPay.onResult(payResult);
+                    }
+
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
 }

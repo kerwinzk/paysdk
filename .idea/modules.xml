@@ -3,9 +3,13 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/mobilepay.iml" filepath="$PROJECT_DIR$/mobilepay.iml" />
+      <module fileurl="file://C:\Users\zhangke\Desktop\paysdk\app\app.iml" filepath="C:\Users\zhangke\Desktop\paysdk\app\app.iml" />
+      <module fileurl="file://C:\Users\zhangke\Desktop\paysdk\mobilepay.iml" filepath="C:\Users\zhangke\Desktop\paysdk\mobilepay.iml" />
       <module fileurl="file://$PROJECT_DIR$/paycompiler/paycompiler.iml" filepath="$PROJECT_DIR$/paycompiler/paycompiler.iml" />
-      <module fileurl="file://$PROJECT_DIR$/paysdk/paysdk.iml" filepath="$PROJECT_DIR$/paysdk/paysdk.iml" />
+      <module fileurl="file://C:\Users\zhangke\Desktop\paysdk\paycompiler\paycompiler.iml" filepath="C:\Users\zhangke\Desktop\paysdk\paycompiler\paycompiler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/paysdk.iml" filepath="$PROJECT_DIR$/paysdk.iml" />
+      <module fileurl="file://C:\Users\zhangke\Desktop\paysdk\paysdk\paysdk.iml" filepath="C:\Users\zhangke\Desktop\paysdk\paysdk\paysdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/paysdk/paysdk-paysdk.iml" filepath="$PROJECT_DIR$/paysdk/paysdk-paysdk.iml" />
     </modules>
   </component>
 </project>
